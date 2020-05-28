@@ -19,6 +19,7 @@ window.addEventListener("load", function(){
    });
 
    form.addEventListener('submit', function(event){
+      event.preventDefault();
       let astro1 = document.querySelector("input[name=pilotName]");
       let astro2 = document.querySelector("input[name=copilotName]");
       let fuel1 = document.querySelector("input[name=fuelLevel]");
@@ -27,16 +28,12 @@ window.addEventListener("load", function(){
       let banner = document.querySelector("#launchStatusCheck");
       let bannersub = document.querySelector("#launchStatus");
 
-      fuel1 = number(fuel1.value);
-      cargo1 = number(cargo1.value);
-
-      if (astro1.value === "" || astro2.value === "" || isNaN(fuel1) || isNaN(cargo1)) {
+      if (astro1.value === "" || astro2.value === "" || fuel1.value === "" || cargo1.value === "") {
          window.alert("All fields are required!");
-         event.preventDefault();
-      };
-
-
-     if (fuel1 < 10000 || cargo1 > 10000){
+      } else if (isNaN(astro1.value) === false || isNaN(astro2.value) === false || isNaN(fuel1.value) || isNaN(cargo1.value)) {
+         window.alert("Wrong type of data!");
+      } else {
+         if (Number(fuel1.value) < 10000 && Number(cargo1.value) > 10000){
          faulty.style.visibility = "visible";
          bannersub.innerHTML = "Shuttle not ready for launch";
          banner.style.backgroundColor = "#CC4C4C";
@@ -44,9 +41,43 @@ window.addEventListener("load", function(){
                 <ol>
                     <li id="pilotStatus">Pilot ${astro1.value} Ready</li>
                     <li id="copilotStatus">Co-pilot ${astro2.value} Ready</li>
-                    <li id="fuelStatus">Fuel level insufficient: ${fuel1} liters loaded</li>
-                    <li id="cargoStatus">Cargo mass excceds load limit: ${cargo1} kilograms loaded</li>
+                    <li id="fuelStatus">Fuel level insufficient: ${fuel1.value} liters loaded</li>
+                    <li id="cargoStatus">Cargo mass excceds load limit: ${cargo1.value} kilograms loaded</li>
                 </ol>`;
+         } else if (Number(fuel1.value) < 10000){
+            faulty.style.visibility = "visible";
+            bannersub.innerHTML = "Shuttle not ready for launch";
+            banner.style.backgroundColor = "#CC4C4C";
+            faulty.innerHTML = `
+                   <ol>
+                       <li id="pilotStatus">Pilot ${astro1.value} Ready</li>
+                       <li id="copilotStatus">Co-pilot ${astro2.value} Ready</li>
+                       <li id="fuelStatus">Fuel level insufficient: ${fuel1.value} liters loaded</li>
+                       <li id="cargoStatus">Cargo mass ${cargo1.value} kilograms loaded</li>
+                   </ol>`;
+         } else if (Number(cargo1.value) > 10000){
+            faulty.style.visibility = "visible";
+            bannersub.innerHTML = "Shuttle not ready for launch";
+            banner.style.backgroundColor = "#CC4C4C";
+            faulty.innerHTML = `
+                <ol>
+                    <li id="pilotStatus">Pilot ${astro1.value} Ready</li>
+                    <li id="copilotStatus">Co-pilot ${astro2.value} Ready</li>
+                    <li id="fuelStatus">Fuel level ${fuel1.value} liters loaded</li>
+                    <li id="cargoStatus">Cargo mass excceds load limit: ${cargo1.value} kilograms loaded</li>
+                    </ol>`;
+         } else {
+            faulty.style.visibility = "visible";
+            bannersub.innerHTML = "Launch Ready!";
+            banner.style.backgroundColor = "#228B22";
+            faulty.innerHTML = `
+                <ol>
+                    <li id="pilotStatus">Pilot ${astro1.value} Ready</li>
+                    <li id="copilotStatus">Co-pilot ${astro2.value} Ready</li>
+                    <li id="fuelStatus">Fuel level ${fuel1.value} liters loaded</li>
+                    <li id="cargoStatus">Cargo mass ${cargo1.value} kilograms loaded</li>
+                    </ol>`;
+         }
       };
   });
 });
